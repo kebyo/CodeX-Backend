@@ -18,11 +18,21 @@ router.post('/', async (req, res) => {
 });
 
 router.get('/', async (req, res) => {
-
+   const servers = await Server.find();
+   
+   res.status(200).json({
+       servers,
+   })
 });
 
 router.get('/:id', async (req, res) => {
+    const id = req.params.id;
 
+    const server = (await Server.find({_id: id}))[0];
+    
+    res.status(200).json({
+        server,
+    })
 });
 
 module.exports = router;
