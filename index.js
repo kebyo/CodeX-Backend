@@ -1,14 +1,15 @@
-require('dotenv').config();
-const http = require('http');
+import dotenv from 'dotenv';
+import http from 'http';
+import app from './app/app';
+
+dotenv.config();
 
 const port = process.env.PORT_TEST;
-
-const app = require('./app/app');
 
 const server = http.createServer(app, () => {
     console.log('Server is working!');
 });
 
 server.listen(port, () => {
-    console.log('Serves is listening!');
+    console.log('Server is listening!');
 });

@@ -1,11 +1,10 @@
-const express = require('express');
+import express from 'express';
+import ServersController from '../controllers/servers';
+
 const router = express.Router();
-const ServersController = require('../controllers/servers');
 
-router.post('/', ServersController.addServer);
+router.get('/', ServersController.getAll);
 
-router.get('/', ServersController.getAllServers);
+router.get('/:id', ServersController.getByID);
 
-router.get('/:id', ServersController.getServerByID);
-
-module.exports = router;
+export default router

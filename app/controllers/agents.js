@@ -1,28 +1,26 @@
-const DBcommunicate = require('../service/servers');
+import ServerService from '../service/servers';
 
-module.exports = class AgentsController {
+export default class AgentsController {
     static async updateInfo(req, res) {
         const updatedServer = {
             name: req.body.name,
             projects: req.body.projects,
         };
-    
-        const server = await DBcommunicate.findByName(updatedServer.name);
-       
-        if (!server) {
-            await DBcommunicate.add(updatedServer);
+
+        try {
+            const newServer = await ServerService.update({ name: updatedServer.name }, updatedServer.projects);
+            
+            res.json({
+                message: 'Server updated',
+                server: newServer,
+            });    
+        } catch (error) {
+            await ServerService.add(updatedServer);
     
             return res.json({
-                message: "New server added",
+                message: 'New server added',
                 server: updatedServer,
             });
         }
-    
-        const newServer = await DBcommunicate.update(server, updatedServer);
-    
-        res.json({
-            message: 'Server updated',
-            server: newServer,
-        });
     }
 }

@@ -1,7 +1,8 @@
-const express = require('express');
+import express from 'express';
+import AgentsController from '../controllers/agents';
+
 const router = express.Router();
-const AgentsController = require('../controllers/agents');
 
 router.patch('/', AgentsController.updateInfo);
 
-module.exports = router;
+export default router;

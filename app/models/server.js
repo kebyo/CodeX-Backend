@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const serverSchema = mongoose.Schema({
     name: { type: String, required: true },
     projects: [{type: Object, ref: 'Project'}],
 });
 
-module.exports = mongoose.model('Server', serverSchema);
+export default mongoose.model('Server', serverSchema);

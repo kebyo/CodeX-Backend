@@ -1,15 +1,18 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
+import express from 'express';
+import bodyParser from 'body-parser';
+import mongoose from 'mongoose';
+import servers from './routes/servers';
+import agents from './routes/agents';
+import dotenv from 'dotenv';
 
-const servers = require('./routes/servers');
-const agents = require('./routes/agents');
+dotenv.config();
 
 const app = express();
 
 mongoose.connect(`mongodb+srv://oybek:${process.env.MONGO_PASS}@cluster0.gqiob.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`, { 
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useFindAndModify: false,
 }, () => {
     console.log('DB is working');
 });
@@ -39,4 +42,4 @@ app.use((error, req, res, next) => {
     });
 });
 
-module.exports = app;
+export default app;

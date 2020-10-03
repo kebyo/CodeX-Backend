@@ -1,15 +1,13 @@
-const express = require('express');
-const Server = require('../models/server');
-const DBcommunicate = require('../service/servers');
+import ServerService from '../service/servers';
 
-module.exports = class ServersController {
-    static async addServer(req, res) {
+export default class ServersController {
+    static async add(req, res) {
         const newServer = {
             name: req.body.name,
             projects: req.body.projects,
         };
 
-        const server = await DBcommunicate.add(newServer);
+        const server = await ServerService.add(newServer);
 
         res.status(200).json({
             message: "New server added",
@@ -17,18 +15,18 @@ module.exports = class ServersController {
         });
     }
 
-    static async getAllServers(req, res) {
-        const servers = await DBcommunicate.findAll();
+    static async getAll(req, res) {
+        const servers = await ServerService.findAll();
 
         res.status(200).json({
             servers,
         })
     }
 
-    static async getServerByID(req, res) {
+    static async getByID(req, res) {
         const id = req.params.id;
     
-        const server = await DBcommunicate.findById(id);
+        const server = await ServerService.findById(id);
         
         res.status(200).json({
             server,
