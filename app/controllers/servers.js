@@ -1,16 +1,15 @@
 const express = require('express');
-const router = express.Router();
-
 const Server = require('../models/server');
+const DBcommunicate = require('../service/servers');
 
 module.exports = class ServersController {
     static async addServer(req, res) {
-        const server = new Server({
+        const newServer = {
             name: req.body.name,
             projects: req.body.projects,
-        });
+        };
 
-        await server.save();
+        const server = await DBcommunicate.add(newServer);
 
         res.status(200).json({
             message: "New server added",
@@ -19,7 +18,7 @@ module.exports = class ServersController {
     }
 
     static async getAllServers(req, res) {
-        const servers = await Server.find();
+        const servers = await DBcommunicate.findAll();
 
         res.status(200).json({
             servers,
@@ -29,7 +28,7 @@ module.exports = class ServersController {
     static async getServerByID(req, res) {
         const id = req.params.id;
     
-        const server = (await Server.find({_id: id}))[0];
+        const server = await DBcommunicate.findById(id);
         
         res.status(200).json({
             server,

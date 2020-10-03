@@ -1,29 +1,28 @@
-
-const Server = require('../models/server');
+const DBcommunicate = require('../service/servers');
 
 module.exports = class AgentsController {
     static async updateInfo(req, res) {
-        const updServer = new Server({
+        const updatedServer = {
             name: req.body.name,
             projects: req.body.projects,
-        });
+        };
     
-        const server = await Server.findOne({ name: updServer.name });
+        const server = await DBcommunicate.findByName(updatedServer.name);
        
         if (!server) {
-            await updServer.save();
+            await DBcommunicate.add(updatedServer);
     
             return res.json({
                 message: "New server added",
-                updServer,
+                server: updatedServer,
             });
         }
     
-        await server.updateOne({$set: {projects: updServer.projects}});
+        const newServer = await DBcommunicate.update(server, updatedServer);
     
         res.json({
             message: 'Server updated',
-            updServer,
+            server: newServer,
         });
     }
 }
