@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import servers from './routes/servers';
 import agents from './routes/agents';
+import ping from './routes/ping';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -26,6 +27,8 @@ app.use(bodyParser.json());
 app.use('/servers', servers);
 
 app.use('/agents', agents);
+
+app.use('/ping', ping);
  
 app.use((req, res, next) => {
     const error = new Error('Not found');
@@ -36,9 +39,7 @@ app.use((req, res, next) => {
 app.use((error, req, res, next) => {
     res.status(error.status);
     res.json({
-        error: {
-            error,
-        }
+        error,
     });
 });
 
