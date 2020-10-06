@@ -29,7 +29,7 @@ export default class ServerService {
         );
         
         if (!server){
-            throw Error('Not found');
+            throw Error('Did not find the server');
         }
 
         return server;

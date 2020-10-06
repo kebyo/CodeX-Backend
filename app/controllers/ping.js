@@ -19,7 +19,8 @@ export default class PingController{
         await ServerService.update({name: server.name}, projects);
 
         res.json({
-            message: "Works!",
+            message: "Pinged!",
+            server,
         })
     }
 }
