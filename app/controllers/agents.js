@@ -1,4 +1,4 @@
-import ServerService from '../service/servers';
+import ServersService from '../service/servers';
 
 export default class AgentsController {
     static async updateInfo(req, res) {
@@ -8,19 +8,15 @@ export default class AgentsController {
         };
 
         try {
-            const newServer = await ServerService.update({ name: updatedServer.name }, updatedServer.projects);
-            
-            res.json({
-                message: 'Server updated',
-                server: newServer,
-            });    
+            await ServersService.update({ name: updatedServer.name }, updatedServer.projects);
         } catch (error) {
-            await ServerService.add(updatedServer);
-    
             return res.json({
-                message: 'New server added',
-                server: updatedServer,
-            });
+                message: error.message,
+            })
         }
+
+        res.json({
+            message: 'Server updated',
+        });
     }
 }

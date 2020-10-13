@@ -1,26 +1,32 @@
 import ping from 'ping';
-import ServerService from '../service/servers';
+import ProjectsService from '../service/project';
+import ServersService from '../service/servers';
 
-export default class PingController{
+export default class PingController {
     static async ping(req, res) {
-        const serverId = req.params.serverId;
+        const id = req.params.serverId;
 
-        const server = await ServerService.findById(serverId);
+        const server = await ServersService.findById(id);
+        const projects = await ProjectsService.find({ server: id });
 
-        const projects = server.projects;
-        
+        const updatedProjects = [];
+
         for (const project of projects) {
             const host = project.name;
+            
+            const result = await ping.promise.probe(host);
+            console.log(result);
+            const status = result.alive ? 200 : 500;
 
-            const isAlive = (await ping.promise.probe(host)).alive;
-            project.status = isAlive ? 200 : 500;
+            const updatedProject = await ProjectsService.update({name: project.name}, status);
+
+            updatedProjects.push(updatedProject);
         }
-
-        await ServerService.update({name: server.name}, projects);
 
         res.json({
             message: "Pinged!",
-            server,
+            serverInfo: server,
+            projects: updatedProjects,
         })
     }
 }

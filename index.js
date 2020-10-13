@@ -1,10 +1,8 @@
-import dotenv from 'dotenv';
 import http from 'http';
 import app from './app/app';
+import config from './app/config/config';
 
-dotenv.config();
-
-const port = process.env.PORT_TEST;
+const port = config.port;
 
 const server = http.createServer(app, () => {
     console.log('Server is working!');

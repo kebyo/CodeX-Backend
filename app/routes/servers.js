@@ -7,4 +7,4 @@ router.get('/', ServersController.getAll);
 
 router.get('/:id', ServersController.getByID);
 
-export default router
+export default router;

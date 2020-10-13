@@ -1,10 +1,11 @@
 import Server from '../models/server';
+import ProjectsService from './project';
 
-export default class ServerService {
+export default class ServersService {
     static async add(newServer) {
         const server = new Server({
             name: newServer.name,
-            projects: newServer.projects,
+            workspace: newServer.workspace,
         });
 
         return server.save();
@@ -23,16 +24,32 @@ export default class ServerService {
     }
 
     static async update(serverData, updatedProjects) {
-        const server =  await Server.findOneAndUpdate(serverData,
-            {$set: { projects: updatedProjects }},
-            {new: true},
-        );
-        
-        if (!server){
+        const server = await Server.findOne(serverData);
+        if (!server) {
             throw Error('Did not find the server');
         }
 
-        return server;
-    }
+        const projects = await ProjectsService.find({server: server._id});
 
+        for (const project of projects) {
+            if (updatedProjects.includes(project.name)){
+                const i = updatedProjects.indexOf(project.name);
+                updatedProjects.splice(i, 1);
+                continue;
+            }
+            
+            await ProjectsService.delete({_id: project._id});
+        }
+
+        for (const project of updatedProjects) {
+            const projectObj = {
+                name: project,
+                status: 500,
+                server: server._id,
+            }
+            await ProjectsService.add(projectObj);
+        }
+
+        return;
+    }
 }

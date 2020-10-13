@@ -4,13 +4,12 @@ import mongoose from 'mongoose';
 import servers from './routes/servers';
 import agents from './routes/agents';
 import ping from './routes/ping';
-import dotenv from 'dotenv';
-
-dotenv.config();
+import workspaces from './routes/workspaces';
+import config from './config/config';
 
 const app = express();
 
-mongoose.connect(`mongodb+srv://oybek:${process.env.MONGO_PASS}@cluster0.gqiob.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`, { 
+mongoose.connect(`mongodb+srv://oybek:${config.mongoPass}@cluster0.gqiob.mongodb.net/${config.dbName}?retryWrites=true&w=majority`, { 
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
@@ -29,6 +28,8 @@ app.use('/servers', servers);
 app.use('/agents', agents);
 
 app.use('/ping', ping);
+
+app.use('/workspaces', workspaces);
  
 app.use((req, res, next) => {
     const error = new Error('Not found');
