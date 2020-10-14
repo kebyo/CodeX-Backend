@@ -37,8 +37,8 @@ export default class ServersService {
 
         for (const project of projects) {
             if (updatedProjects.includes(project.name)){
-                const i = updatedProjects.indexOf(project.name);
-                updatedProjects.splice(i, 1);
+                const index = updatedProjects.indexOf(project.name);
+                updatedProjects.splice(index, 1);
                 continue;
             }
             
@@ -51,9 +51,9 @@ export default class ServersService {
                 status: 500,
                 server: server._id,
             }
+            
             await ProjectsService.add(projectObj);
         }
 
-        return;
     }
 }
