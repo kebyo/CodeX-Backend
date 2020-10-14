@@ -9,6 +9,4 @@ router.get('/:id', WorkspacesController.getById);
 
 router.get('/:id/servers', WorkspacesController.getServers);
 
-router.get('/:id/servers/:serverId', WorkspacesController.getServerById);
-
 export default router;

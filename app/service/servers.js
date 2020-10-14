@@ -23,6 +23,10 @@ export default class ServersService {
         return Server.findOne({ name });
     }
 
+    static async find(options){
+        return Server.find(options);
+    }
+
     static async update(serverData, updatedProjects) {
         const server = await Server.findOne(serverData);
         if (!server) {

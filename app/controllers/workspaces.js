@@ -1,7 +1,6 @@
 import WorkspacesService from '../service/workspaces';
 import ProjectsService from '../service/project';
 import ServersService from '../service/servers';
-import project from '../models/project';
 
 export default class WorkspaceController {
     static async add(req, res) {
@@ -43,42 +42,47 @@ export default class WorkspaceController {
     static async getById(req, res) {
         const id = req.params.id;
 
-        const workspace = await WorkspacesService.findById(id);
+        const workspaceDocument = await WorkspacesService.findById(id);
+
+        const serversDocuments = await ServersService.find({workspace: workspaceDocument._id});
+
+        let servers = [];
+
+        for (const server of serversDocuments) {
+            const projects = await ProjectsService.find({server: server._id});
+            
+            servers.push({
+                serverInfo: server,
+                projects,
+            });
+        }
 
         res.json({
-            workspace,
+            workspaceInfo: workspaceDocument,
+            servers,
         })
     }
 
     static async getServers(req, res) {
-        const servers = (await WorkspacesService.findById(req.params.id)).servers;
+        const id = req.params.id;
+
+        const serversDocuments = await ServersService.find({workspace: id});
+
+        let servers = [];
+
+        for (const server of serversDocuments) {
+            const projects = await ProjectsService.find({server: server._id});
+            
+            servers.push({
+                serverInfo: server,
+                projects,
+            });
+        }
 
         res.json({
             servers,
         })
     }
 
-    static async getServerById(req, res) {
-        const workspace = await WorkspacesService.findById(req.params.id).populate({
-            path: 'servers',
-            populate: {
-                path: 'projects',
-            }
-        });
-
-        const servers = workspace.servers;
-
-        for (const server of servers) {
-            if (server._id == req.params.serverId) {
-                return res.json({
-                    server,
-                });
-            }
-        }
-
-        res.json({
-            message: 'Not found',
-        })
-    }
 }
 
