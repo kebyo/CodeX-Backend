@@ -1,8 +1,13 @@
 import WorkspacesService from '../service/workspaces';
 import ProjectsService from '../service/project';
 import ServersService from '../service/servers';
-
+/**
+ * Класс, описывающий логику обработки запроса для Воркспейсов 
+ */
 export default class WorkspaceController {
+    /**
+     * Добавляет новый Воркспейс 
+     */
     static async add(req, res) {
         const workspace = {
             name: req.body.name,
@@ -39,10 +44,13 @@ export default class WorkspaceController {
         });
     }
 
+    /**
+     * Возвращает Воркспейс с id 
+     */
     static async getById(req, res) {
         const id = req.params.id;
 
-        const workspaceDocument = await WorkspacesService.findById(id);
+        const workspaceDocument = await WorkspacesService.find({_id: id});
 
         const serversDocuments = await ServersService.find({workspace: workspaceDocument._id});
 
@@ -62,7 +70,9 @@ export default class WorkspaceController {
             servers,
         })
     }
-
+    /**
+     * Возвращает информацию о серверах в Воркспейсе с id 
+     */
     static async getServers(req, res) {
         const id = req.params.id;
 

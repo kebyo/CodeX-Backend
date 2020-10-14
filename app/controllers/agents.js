@@ -1,6 +1,11 @@
 import ServersService from '../service/servers';
-
+/**
+ * Класс, описывающий логику обработки запроса для Agents
+ */
 export default class AgentsController {
+    /**
+     * Обновляет статусы всех проектов, которые хостятся на сервере с name 
+     */
     static async updateInfo(req, res) {
         const updatedServer = {
             name: req.body.name,
