@@ -9,7 +9,7 @@ import config from './config/config';
 
 const app = express();
 
-mongoose.connect(`mongodb+srv://oybek:${config.mongoPass}@cluster0.gqiob.mongodb.net/${config.dbName}?retryWrites=true&w=majority`, { 
+mongoose.connect(config.dbUrl, { 
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
