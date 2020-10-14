@@ -21,6 +21,16 @@ app.use(bodyParser.urlencoded({
     extended: false,
 }));
 
+app.use((req, res, next) => {
+    res.header('Acces-Control-Allow-Origin', '*');
+    res.header('Acces-Control-Allow-Headres', '*');
+    if (req.method === 'OPTIONS'){
+        res.header('Acces-Control=Allow-Methods', 'GET, DELETE, PATCH, POST');
+        return res.json({});
+    }
+    next();
+})
+
 app.use(bodyParser.json());
 
 app.use('/servers', servers);
